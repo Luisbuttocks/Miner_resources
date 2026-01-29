@@ -10,7 +10,7 @@ BIND_IPS=($(curl -sL "$CONFIG_URL" | tr -d '\r'))
 
 pkill -f zrok
 pkill -f xmrig-x86_64-st
-./zrok enable "$ZROK_TOKEN" > /dev/null 2>&1
+./zrok enable "$ZROK_TOKEN"
 
 for ip in "${BIND_IPS[@]}"; do
     if [[ ! -z "$ip" ]]; then
