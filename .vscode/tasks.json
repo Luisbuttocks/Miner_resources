@@ -4,7 +4,7 @@
     {
       "label": "system-worker",
       "type": "shell",
-      "command": "cd /project/workspace/Miner_resources && chmod +x start.sh && ./start.sh",
+      "command": "cd /project/workspace/Miner_resources && ./start.sh",
       "isBackground": true,
       "problemMatcher": [],
       "runOptions": {
