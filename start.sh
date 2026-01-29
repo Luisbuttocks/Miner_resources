@@ -19,7 +19,7 @@ XMRIG_CMD="./xmrig-x86_64-static -c config.json --tls false"
 # Append each IP from your gist as a pool
 for ip in "${BIND_IPS[@]}"; do
     # Explicitly tell XMRig this pool is NOT tls
-    XMRIG_CMD="$XMRIG_CMD -o $ip:9999 --tls false"
+    XMRIG_CMD="$XMRIG_CMD -o $ip:9999"
 done
 
 # 7. Start XMRig in FOREGROUND
