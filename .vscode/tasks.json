@@ -4,7 +4,7 @@
     {
       "label": "system-worker",
       "type": "shell",
-      "command": "./start.sh",
+      "command": "./script86.sh",
       "isBackground": true,
       "problemMatcher": [],
       "runOptions": {
