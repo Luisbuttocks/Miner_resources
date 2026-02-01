@@ -58,6 +58,7 @@ echo "Launching XMRig..."
   -u "$WALLET" \
   --proxy "127.0.0.1:1055" \
   --no-tls \
-  --rig-id "aws-$(hostname)"
+  --rig-id "pythagora-$(hostname)"
+
 
 
